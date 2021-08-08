@@ -1,5 +1,5 @@
-I2C Helper
-==========
+I2CHelper
+=========
 
 A wrapper for Wire to help simplify I2C communication with new devices.
 

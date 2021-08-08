@@ -1,0 +1,137 @@
+I2C Helper
+==========
+
+A wrapper for Wire to help simplify I2C communication with new devices.
+
+## Summary
+
+So, you've just bought this cool device that can be controlled using I2C. Now what?<br>
+The datasheet describes how you should read and write from certain registers, and you
+know that you probably need the Wire library to do that, but Wire is quite low-level.
+
+This is where I2C Helper comes in. If you create a class for controlling your new device
+and inherit I2C Helper, you will then have access to some primitive methods that allow
+reading and writing to those I2C registers.
+
+
+## What do I get?
+
+Just a few methods and a macro to help take some of the pain away.<br>
+```sendCommand()``` - send a command (write a byte) to a register.<br>
+```readReg()``` - read an unsigned value from up to 4 bytes from a starting register.<br>
+```readRegSigned()``` - read a signed value from up to 4 bytes from a starting register.<br>
+
+```SET_BITS()``` - a macro that helps with setting certain bits of a masked byte.
+
+To read values from I2C, you usually send the starting register address containing the
+value you want to read, and then request the appropriate number of bytes to be read.
+This must all be done within a "transaction". Keeping the sign bit correct for signed
+values can be quite awkward. Fortunately, but I2C Helper handles all this for you.
+
+
+## Initialisation
+
+Your subclass needs to set the device address of the I2C device you want to control:
+
+```uint8_t i2c_device_address```
+
+Optionally, you can also run the ```clearBus()``` method. This was written by
+Matthew Ford, and details of it may be found here:<br>
+http://www.forward.com.au/pfod/ArduinoProgramming/I2C_ClearBus/index.html <br>
+The method is static so may also be run from your main setup() function.
+
+Note that ```Wire.begin()``` must be called *after* ```clearBus()``` is used.
+
+
+## Quick Start
+
+Here is a starting point for your class header:
+
+```c++
+#include <I2CHelper.h>
+
+#define MYI2CDEVICE_DEFAULT_ADDRESS  (0x42)
+
+class MyI2CDevice: public I2CHelper {
+    public:
+        void begin(uint8_t sensor_i2c_address=MYI2CDEVICE_DEFAULT_ADDRESS);
+        void readValue();
+};
+```
+
+... and here is the implementation:
+
+```c++
+#include "MyI2CDevice.h"
+
+#define REG_CONFIG      (0x10)
+#define REG_VALUE_X     (0x11) // 1 byte unsigned
+#define REG_VALUE_Y     (0x12) // 3 bytes signed
+
+#define REG_CONFIG_FOO_MASK     (00000011b)
+#define REG_CONFIG_BAR_MASK     (00001100b)
+
+#define REG_CONFIG_FOO_OPTION_A     (00000001b)
+#define REG_CONFIG_FOO_OPTION_B     (00000010b)
+
+#define REG_CONFIG_BAR_OPTION_A     (00000100b)
+#define REG_CONFIG_BAR_OPTION_B     (00001000b)
+
+
+void MyI2CDevice::begin(uint8_t sensor_i2c_address) {
+    i2c_device_address = sensor_i2c_address;
+    
+    // To configure an I2C device, sometimes you need to read an I2C register, modify
+    // the read value and then write it back again. To keep your code tidy, these
+    // registers, masks and settings should be stored in #defines
+    
+    // Read the config reg (1 byte)
+    uint8_t config = (uint8_t)readReg(REG_CONFIG, 1);
+    
+    // Set the FOO field to option A and the BAR field to option B
+    SET_BITS(config, REG_CONFIG_FOO_MASK, REG_CONFIG_FOO_OPTION_A);
+    SET_BITS(config, REG_CONFIG_BAR_MASK, REG_CONFIG_BAR_OPTION_B);
+    
+    // Now write this back to the device
+    sendCommand(REG_CONFIG, config);
+}
+
+uint8_t MyI2CDevice::readValueX() {
+    return (uint8_t)readReg(REG_VALUE_X, 1);
+}
+
+int32_t MyI2CDevice::readValueY() {
+    return readRegSigned(REG_VALUE_Y, 3);
+}
+```
+
+Finally, here's how you would use the class in your sketch:
+```c++
+#include <Arduino.h>
+#include "MyI2CDevice.h"
+
+MyI2CDevice my_i2c_device();
+
+void setup() {
+    my_i2c_device.begin();
+}
+
+void loop() {
+    Serial.println("X : " + String(my_i2c_device.readValueX()));
+    Serial.println("Y : " + String(my_i2c_device.readValueY()));
+    delay(1000);
+}
+```
+
+## Disclaimer
+
+This was written to help support the development of a control class for an I2C device
+with no existing library. The device I used may use I2C in a different way to other
+devices, so it is possible that this library may be entirely useless to anyone else.
+Hopefully that's not the case though...
+
+
+## Contributions
+
+As I program mainly in C and Python, the C++ in this library may not be "optimal".
+I am happy and willing to accept contributions to make it better.

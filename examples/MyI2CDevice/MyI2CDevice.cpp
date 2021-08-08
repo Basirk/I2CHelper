@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 #include "MyI2CDevice.h"
 
 #define REG_CONFIG      (0x10)

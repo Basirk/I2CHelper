@@ -55,13 +55,16 @@ Here is a starting point for your class header:
 class MyI2CDevice: public I2CHelper {
     public:
         void begin(uint8_t sensor_i2c_address=MYI2CDEVICE_DEFAULT_ADDRESS);
-        void readValue();
+        uint8_t readValueX();
+        int32_t readValueY();
 };
 ```
 
 ... and here is the implementation:
 
 ```c++
+#include <Arduino.h>
+
 #include "MyI2CDevice.h"
 
 #define REG_CONFIG      (0x10)
@@ -110,7 +113,7 @@ Finally, here's how you would use the class in your sketch:
 #include <Arduino.h>
 #include "MyI2CDevice.h"
 
-MyI2CDevice my_i2c_device();
+MyI2CDevice my_i2c_device = MyI2CDevice();
 
 void setup() {
     my_i2c_device.begin();

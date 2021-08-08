@@ -68,14 +68,14 @@ class MyI2CDevice: public I2CHelper {
 #define REG_VALUE_X     (0x11) // 1 byte unsigned
 #define REG_VALUE_Y     (0x12) // 3 bytes signed
 
-#define REG_CONFIG_FOO_MASK     (00000011b)
-#define REG_CONFIG_BAR_MASK     (00001100b)
+#define REG_CONFIG_FOO_MASK     (0b00000011)
+#define REG_CONFIG_BAR_MASK     (0b00001100)
 
-#define REG_CONFIG_FOO_OPTION_A     (00000001b)
-#define REG_CONFIG_FOO_OPTION_B     (00000010b)
+#define REG_CONFIG_FOO_OPTION_A     (0b00000001)
+#define REG_CONFIG_FOO_OPTION_B     (0b00000010)
 
-#define REG_CONFIG_BAR_OPTION_A     (00000100b)
-#define REG_CONFIG_BAR_OPTION_B     (00001000b)
+#define REG_CONFIG_BAR_OPTION_A     (0b00000100)
+#define REG_CONFIG_BAR_OPTION_B     (0b00001000)
 
 
 void MyI2CDevice::begin(uint8_t sensor_i2c_address) {

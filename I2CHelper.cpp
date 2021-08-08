@@ -1,7 +1,5 @@
 #include <Arduino.h>
 
-#include <Wire.h>
-
 #include "I2CHelper.h"
 
 #ifdef DEBUG_I2C

@@ -45,7 +45,9 @@ Note that `Wire.begin()` must be called *after* `clearBus()` is used.
 
 ## Quick Start
 
-Here is a starting point for your class header:
+This code is available in the `/examples` directory.
+
+Here is a starting point for your class definition, which inherits from I2CHelper:
 
 ```c++
 #include <I2CHelper.h>
@@ -60,7 +62,10 @@ class MyI2CDevice: public I2CHelper {
 };
 ```
 
-... and here is the implementation:
+This device has two registers that can be read, X and Y.<br>
+X is a single unsigned byte, and Y is a signed three-byte value.
+
+Here is the implementation:
 
 ```c++
 #include <Arduino.h>
@@ -111,11 +116,20 @@ int32_t MyI2CDevice::readValueY() {
 Finally, here's how you would use the class in your sketch:
 ```c++
 #include <Arduino.h>
+#include <Wire.h>
+
 #include "MyI2CDevice.h"
 
 MyI2CDevice my_i2c_device = MyI2CDevice();
 
 void setup() {
+    // Optionally ensure I2C is correctly reset before starting (use default SDA and SCL pins)
+    my_i2c_device.clearBus();
+    
+    // Start Wire (use default SDA and SCL pins)
+    Wire.begin();
+    
+    // Start the I2C controlled device (use default I2C device address)
     my_i2c_device.begin();
 }
 

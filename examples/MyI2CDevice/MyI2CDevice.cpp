@@ -16,8 +16,8 @@
 #define REG_CONFIG_BAR_OPTION_B     (0b00001000)
 
 
-void MyI2CDevice::begin(uint8_t sensor_i2c_address) {
-    i2c_device_address = sensor_i2c_address;
+void MyI2CDevice::begin(uint8_t i2c_address) {
+    i2c_device_address = i2c_address;
 
     // To configure an I2C device, sometimes you need to read an I2C register, modify
     // the read value and then write it back again. To keep your code tidy, these

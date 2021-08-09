@@ -56,7 +56,7 @@ Here is a starting point for your class definition, which inherits from I2CHelpe
 
 class MyI2CDevice: public I2CHelper {
     public:
-        void begin(uint8_t sensor_i2c_address=MYI2CDEVICE_DEFAULT_ADDRESS);
+        void begin(uint8_t i2c_address=MYI2CDEVICE_DEFAULT_ADDRESS);
         uint8_t readValueX();
         int32_t readValueY();
 };
@@ -86,8 +86,8 @@ Here is the implementation:
 #define REG_CONFIG_BAR_OPTION_B     (0b00001000)
 
 
-void MyI2CDevice::begin(uint8_t sensor_i2c_address) {
-    i2c_device_address = sensor_i2c_address;
+void MyI2CDevice::begin(uint8_t i2c_address) {
+    i2c_device_address = i2c_address;
     
     // To configure an I2C device, sometimes you need to read an I2C register, modify
     // the read value and then write it back again. To keep your code tidy, these

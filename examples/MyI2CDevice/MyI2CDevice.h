@@ -1,4 +1,4 @@
-#include "I2CHelper.h"
+#include <I2CHelper.h>
 
 #define MYI2CDEVICE_DEFAULT_ADDRESS  (0x42)
 

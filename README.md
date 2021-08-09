@@ -17,11 +17,11 @@ reading and writing to those I2C registers.
 ## What do I get?
 
 Just a few methods and a macro to help take some of the pain away.<br>
-```sendCommand()``` - send a command (write a byte) to a register.<br>
-```readReg()``` - read an unsigned value from up to 4 bytes from a starting register.<br>
-```readRegSigned()``` - read a signed value from up to 4 bytes from a starting register.<br>
+`sendCommand()` - send a command (write a byte) to a register.<br>
+`readReg()` - read an unsigned value from up to 4 bytes from a starting register.<br>
+`readRegSigned()` - read a signed value from up to 4 bytes from a starting register.<br>
 
-```SET_BITS()``` - a macro that helps with setting certain bits of a masked byte.
+`SET_BITS()` - a macro that helps with setting certain bits of a masked byte.
 
 To read values from I2C, you usually send the starting register address containing the
 value you want to read, and then request the appropriate number of bytes to be read.
@@ -33,14 +33,14 @@ values can be quite awkward. Fortunately, but I2C Helper handles all this for yo
 
 Your subclass needs to set the device address of the I2C device you want to control:
 
-```uint8_t i2c_device_address```
+`uint8_t i2c_device_address`
 
-Optionally, you can also run the ```clearBus()``` method. This was written by
+Optionally, you can also run the `clearBus()` method. This was written by
 Matthew Ford, and details of it may be found here:<br>
 http://www.forward.com.au/pfod/ArduinoProgramming/I2C_ClearBus/index.html <br>
 The method is static so may also be run from your main setup() function.
 
-Note that ```Wire.begin()``` must be called *after* ```clearBus()``` is used.
+Note that `Wire.begin()` must be called *after* `clearBus()` is used.
 
 
 ## Quick Start
@@ -125,6 +125,11 @@ void loop() {
     delay(1000);
 }
 ```
+
+## Debuging
+
+Define `DEBUG_I2C` to enable serial debugging from the library.
+
 
 ## Disclaimer
 

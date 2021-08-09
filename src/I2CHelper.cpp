@@ -4,9 +4,11 @@
 #include "I2CHelper.h"
 
 #ifdef DEBUG_I2C
-#define serial_println(x)   Serial.println(x)
+#define serial_print(...)       Serial.print(__VA_ARGS__)
+#define serial_println(...)     Serial.println(__VA_ARGS__)
 #else
-#define serial_println(x)
+#define serial_print(...)
+#define serial_println(...)
 #endif
 
 
@@ -26,7 +28,8 @@ void I2CHelper::readResponseBytes(int num_bytes, uint8_t *p_buffer) const {
 #endif
     }
     Wire.endTransmission();
-    serial_println("Read bytes : " + str_bytes);
+    serial_print(F("Read bytes : "));
+    serial_println(str_bytes);
 }
 
 
@@ -40,7 +43,8 @@ uint32_t I2CHelper::readResponse(int num_bytes) {
     for (int byte_num = 0; byte_num < num_bytes; byte_num++) {
         response = (response << 8) | response_buffer[byte_num];
     }
-    serial_println("UInt : " + String(response));
+    serial_print(F("UInt : "));
+    serial_println(response);
 
     return response;
 }
@@ -67,14 +71,19 @@ int32_t I2CHelper::readResponseSigned(int num_bytes) {
     converter.unsigned_val = response << bit_shift;
     ret_val = converter.signed_val >> bit_shift;
 
-    serial_println("Int24 : " + String(ret_val));
+    serial_print(F("Int24 : "));
+    serial_println(ret_val);
 
     return ret_val;
 }
 
 
 void I2CHelper::sendCommand(uint8_t reg, uint8_t cmd) const  {
-    serial_println("Sending command : [" + String(reg, HEX) + "] " + String(cmd, HEX));
+    serial_print(F("Sending command : ["));
+    serial_print(reg, HEX);
+    serial_print(F("] "));
+    serial_println(cmd, HEX);
+
     Wire.beginTransmission(i2c_device_address);
     Wire.write(reg);
     Wire.write(cmd);
@@ -83,7 +92,10 @@ void I2CHelper::sendCommand(uint8_t reg, uint8_t cmd) const  {
 
 
 uint32_t I2CHelper::readReg(uint8_t reg, int num_bytes) {
-    serial_println("Reading reg : [" + String(reg, HEX) + "]");
+    serial_print(F("Reading reg : ["));
+    serial_print(reg, HEX);
+    serial_print(F("] "));
+
     Wire.beginTransmission(i2c_device_address);
     Wire.write(reg);
     Wire.endTransmission();
@@ -92,7 +104,10 @@ uint32_t I2CHelper::readReg(uint8_t reg, int num_bytes) {
 
 
 int32_t I2CHelper::readRegSigned(uint8_t reg, int num_bytes) {
-    serial_println("Reading reg : [" + String(reg, HEX) + "]");
+    serial_print(F("Reading signed reg : ["));
+    serial_print(reg, HEX);
+    serial_print(F("] "));
+
     Wire.beginTransmission(i2c_device_address);
     Wire.write(reg);
     Wire.endTransmission();
@@ -108,9 +123,7 @@ int32_t I2CHelper::readRegSigned(uint8_t reg, int num_bytes) {
  * (c)2014 Forward Computing and Control Pty. Ltd.
  * NSW Australia, www.forward.com.au
  * This code may be freely used for both private and commercial use
- */
-
-/**
+ *
  * This routine turns off the I2C bus and clears it
  * on return SCA and SCL pins are tri-state inputs.
  * You need to call Wire.begin() after this to re-enable I2C
@@ -121,7 +134,7 @@ int32_t I2CHelper::readRegSigned(uint8_t reg, int num_bytes) {
  *         2 if SDA held low by slave clock stretch for > 2sec
  *         3 if SDA held low after 20 clocks.
  */
-int I2CHelper::clearBus(int scl, int sda) {
+int I2CHelper::clearBus(int sda, int scl) {
 #if defined(TWCR) && defined(TWEN)
     TWCR &= ~(_BV(TWEN)); //Disable the Atmel 2-Wire interface so we can control the SDA and SCL pins directly
 #endif

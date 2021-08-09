@@ -24,5 +24,5 @@ public:
      * (http://www.forward.com.au/pfod/ArduinoProgramming/I2C_ClearBus/index.html)
      * (c)2014 Forward Computing and Control Pty. Ltd.
      */
-    static int clearBus(int scl=SCL, int sda=SDA);
+    static int clearBus(int sda=SDA, int scl=SCL);
 };

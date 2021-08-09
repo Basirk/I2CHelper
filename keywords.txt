@@ -1,0 +1,8 @@
+I2CHelper       KEYWORD1
+
+begin           KEYWORD2
+sendCommand     KEYWORD2
+readReg         KEYWORD2
+readRegSigned   KEYWORD2
+
+SET_BITS        KEYWORD2

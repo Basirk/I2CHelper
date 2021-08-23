@@ -3,6 +3,8 @@
 
 #include "I2CHelper.h"
 
+//#define DEBUG_I2C
+
 #ifdef DEBUG_I2C
 #define serial_print(...)       Serial.print(__VA_ARGS__)
 #define serial_println(...)     Serial.println(__VA_ARGS__)
@@ -13,23 +15,18 @@
 
 
 void I2CHelper::readResponseBytes(int num_bytes, uint8_t *p_buffer) const {
-#ifdef DEBUG_I2C
-     String str_bytes = "";
-#endif
-
     assert(num_bytes < 4);
     Wire.requestFrom(i2c_device_address, (uint8_t)num_bytes);
-    while(Wire.available() < num_bytes);
+    while(Wire.available() < num_bytes)
+    serial_print(F("Read bytes :"));
     for (int byte_num = 0; byte_num < num_bytes; byte_num++) {
         // MSB read and stored first
         p_buffer[byte_num] = (uint8_t)Wire.read();
-#ifdef DEBUG_I2C
-         str_bytes += " " + String(p_buffer[byte_num], HEX);
-#endif
+        serial_print(" ");
+        serial_print(p_buffer[byte_num], HEX);
     }
     Wire.endTransmission();
-    serial_print(F("Read bytes : "));
-    serial_println(str_bytes);
+    serial_println("");
 }
 
 

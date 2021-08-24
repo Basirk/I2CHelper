@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include <assert.h>
 
 #include "I2CHelper.h"

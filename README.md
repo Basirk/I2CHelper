@@ -3,31 +3,40 @@ I2CHelper
 
 A wrapper for Wire to help simplify I2C communication with new devices.
 
+> **PLEASE NOTE**  
+> A request has been made to change the name of this library from "I2C Helper"
+> to "I2CHelper". This is to bring it in line with the Arduino library
+> recommendations (Lint rule LP015). The pull request can be found here:  
+> https://github.com/arduino/library-registry/pull/347  
+> If you chose to use this library then you will need to switch to the new one
+> once the pull request has been accepted. The code and filenames will remain
+> unchanged.
+
 ## Summary
 
-So, you've just bought this cool device that can be controlled using I2C. Now what?<br>
-The datasheet describes how you should read and write from certain registers, and you
-know that you probably need the Wire library to do that, but Wire is quite low-level.
+So, you've just bought this cool device that can be controlled using I2C. Now what?  
+The datasheet describes how you should read and write from certain registers,
+and you know that you probably need the Wire library to do that, but Wire is
+quite low-level.
 
-This is where I2C Helper comes in. If you create a class for controlling your new device
-and inherit I2C Helper, you will then have access to some primitive methods that allow
-reading and writing to those I2C registers.
-
+This is where I2CHelper comes in. If you create a class for controlling your
+new device and inherit I2CHelper, you will then have access to some primitive
+methods that allow reading and writing to those I2C registers.
 
 ## What do I get?
 
-Just a few methods and a macro to help take some of the pain away.<br>
-`sendCommand()` - send a command (write a byte) to a register.<br>
-`readReg()` - read an unsigned value from up to 4 bytes from a starting register.<br>
-`readRegSigned()` - read a signed value from up to 4 bytes from a starting register.<br>
+Just a few methods and a macro to help take some of the pain away.  
+`sendCommand()` - send a command (write a byte) to a register.  
+`readReg()` - read an unsigned value from up to 4 bytes from a starting register.  
+`readRegSigned()` - read a signed value from up to 4 bytes from a starting register.  
 
 `SET_BITS()` - a macro that helps with setting certain bits of a masked byte.
 
-To read values from I2C, you usually send the starting register address containing the
-value you want to read, and then request the appropriate number of bytes to be read.
-This must all be done within a "transaction". Keeping the sign bit correct for signed
-values can be quite awkward. Fortunately, but I2C Helper handles all this for you.
-
+To read values from I2C, you usually send the starting register address
+containing the value you want to read, and then request the appropriate number
+of bytes to be read. This must all be done within a "transaction". Keeping the
+sign bit correct for signed values can be quite awkward. Fortunately, I2CHelper
+handles all this for you.
 
 ## Initialisation
 
@@ -36,8 +45,8 @@ Your subclass needs to set the device address of the I2C device you want to cont
 `uint8_t i2c_device_address`
 
 Optionally, you can also run the `clearBus()` method. This was written by
-Matthew Ford, and details of it may be found here:<br>
-http://www.forward.com.au/pfod/ArduinoProgramming/I2C_ClearBus/index.html <br>
+Matthew Ford, and details of it may be found here:  
+http://www.forward.com.au/pfod/ArduinoProgramming/I2C_ClearBus/index.html   
 The method is static so may also be run from your main setup() function.
 
 Note that `Wire.begin()` must be called *after* `clearBus()` is used.
@@ -62,7 +71,7 @@ class MyI2CDevice: public I2CHelper {
 };
 ```
 
-This device has two registers that can be read, X and Y.<br>
+This device has two registers that can be read, X and Y.  
 X is a single unsigned byte, and Y is a signed three-byte value.
 
 Here is the implementation:
@@ -147,13 +156,13 @@ Define `DEBUG_I2C` to enable serial debugging from the library.
 
 ## Disclaimer
 
-This was written to help support the development of a control class for an I2C device
-with no existing library. The device I used may use I2C in a different way to other
-devices, so it is possible that this library may be entirely useless to anyone else.
-Hopefully that's not the case though...
+This was written to help support the development of a control class for an I2C
+device with no existing library. The device I used may use I2C in a different
+way to other devices, so it is possible that this library may be entirely
+useless to anyone else. Hopefully that's not the case though...
 
 
 ## Contributions
 
-As I program mainly in C and Python, the C++ in this library may not be "optimal".
+As I program mainly in C and Python, the C++ in this library may not be "optimal".  
 I am happy and willing to accept contributions to make it better.

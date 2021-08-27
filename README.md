@@ -8,7 +8,7 @@ A wrapper for Wire to help simplify I2C communication with new devices.
 > to "I2CHelper". This is to bring it in line with the Arduino library
 > recommendations (Lint rule LP015). The pull request can be found here:  
 > https://github.com/arduino/library-registry/pull/347  
-> If you chose to use this library then you will need to switch to the new one
+> If you choose to use this library then you will need to switch to the new one
 > once the pull request has been accepted. The code and filenames will remain
 > unchanged.
 
